@@ -1,0 +1,23 @@
+[
+  {
+  "number": 0,
+  "assistanceType": 1,
+  "description": "Consultoria Jurídica",
+  "start": null,
+  "end": null
+  },
+  {
+    "number": 0,
+    "assistanceType": 2,
+    "description": "Assessoria Contábil",
+    "start": null,
+    "end": null
+  },
+  {
+    "number": 0,
+    "assistanceType": 2,
+    "description": "Assessoria de Recursos Humanos",
+    "start": null,
+    "end": null
+  }
+]
