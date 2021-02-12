@@ -1,19 +1,19 @@
 package br.com.gcamanager.controllers;
 
 import br.com.gcamanager.domains.assistance.AssistanceDto;
-import br.com.gcamanager.services.process.AssistanceManagerService;
+import br.com.gcamanager.services.assistance.AssistanceManagerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("industrial-process")
-public class IndustrialProcessManagerController {
+@RequestMapping("assistance-manager")
+public class AssistanceManagerController {
 
     private final AssistanceManagerService service;
 
-    public IndustrialProcessManagerController(AssistanceManagerService service) {
+    public AssistanceManagerController(AssistanceManagerService service) {
         this.service = service;
     }
 

@@ -2,8 +2,8 @@ package br.com.gcamanager.services;
 
 import br.com.gcamanager.domains.assistance.*;
 import br.com.gcamanager.services.dashboard.DashboardReportService;
-import br.com.gcamanager.services.process.AssistanceManagerService;
-import br.com.gcamanager.services.process.AssistanceManagerServiceImpl;
+import br.com.gcamanager.services.assistance.AssistanceManagerService;
+import br.com.gcamanager.services.assistance.AssistanceManagerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

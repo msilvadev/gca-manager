@@ -2,7 +2,7 @@ package br.com.gcamanager.application.configuration;
 
 import br.com.gcamanager.domains.assistance.AssistanceDto;
 import br.com.gcamanager.services.dashboard.DashboardReportService;
-import br.com.gcamanager.services.process.AssistanceManagerService;
+import br.com.gcamanager.services.assistance.AssistanceManagerService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package br.com.gcamanager.services.process;
+package br.com.gcamanager.services.assistance;
 
 import br.com.gcamanager.domains.assistance.Assistance;
 import br.com.gcamanager.domains.assistance.AssistanceDto;
