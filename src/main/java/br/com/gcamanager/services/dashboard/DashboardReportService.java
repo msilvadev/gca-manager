@@ -1,9 +1,7 @@
 package br.com.gcamanager.services.dashboard;
 
-import br.com.gcamanager.domains.dashboard.DashboardAssistanceReportDto;
 import br.com.gcamanager.domains.assistance.AssistanceDto;
-
-import java.util.concurrent.ConcurrentMap;
+import br.com.gcamanager.domains.dashboard.DashboardAssistanceReportDto;
 
 public interface DashboardReportService {
 
@@ -11,5 +9,5 @@ public interface DashboardReportService {
 
     void updateCacheDashboarReport(AssistanceDto process);
 
-    ConcurrentMap<Integer, DashboardAssistanceReportDto> getDashboardReport();
+    DashboardAssistanceReportDto getDashboardReport();
 }

@@ -28,34 +28,28 @@ class DashboardAssistanceReportRepositoryTest {
                 .setDefaultQuantity(1)
                 .build();
 
-        repository.add(assistanceType, this.dto);
+        repository.add(this.dto);
 
         assistanceDto = new AssistanceDto(1, 3, "Test", LocalDateTime.now(), LocalDateTime.now());
     }
 
     @Test
     void add() {
-        repository.add(AssistanceType.CONSULTANCY, this.dto);
+        repository.add(this.dto);
 
-        assertThat(repository.getAllDashboardReports()).hasSize(2);
+        assertThat(repository.getAllDashboardReports()).isNotNull();
     }
 
     @Test
     void getAllDashboardReports() {
-        assertThat(repository.getAllDashboardReports()).isNotEmpty();
-    }
-
-    @Test
-    void size() {
-        assertThat(repository.getAllDashboardReports()).hasSize(1);
+        assertThat(repository.getAllDashboardReports()).isNotNull();
     }
 
     @Test
     void update() {
         repository.update(assistanceDto);
 
-        DashboardAssistanceReportDto result = repository.getByProcessType(this.assistanceType);
-
+        DashboardAssistanceReportDto result = repository.getAllDashboardReports();
         assertThat(result.getDefaultQuantity()).isEqualTo(1);
     }
 
@@ -63,7 +57,7 @@ class DashboardAssistanceReportRepositoryTest {
     void tryUpdateWhenNotExistYet() {
         repository.update(assistanceDto);
 
-        DashboardAssistanceReportDto result = repository.getByProcessType(this.assistanceType);
+        DashboardAssistanceReportDto result = repository.getAllDashboardReports();
 
         assertThat(result.getDefaultQuantity()).isEqualTo(1);
     }

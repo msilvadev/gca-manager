@@ -19,5 +19,12 @@
     "description": "Assessoria de Recursos Humanos",
     "start": null,
     "end": null
+  },
+  {
+    "number": 0,
+    "assistanceType": 3,
+    "description": "XXXXXXX",
+    "start": null,
+    "end": null
   }
 ]

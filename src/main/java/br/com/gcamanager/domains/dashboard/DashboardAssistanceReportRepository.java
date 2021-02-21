@@ -8,14 +8,12 @@ import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.function.Consumer;
 
 @Component
 public class DashboardAssistanceReportRepository {
 
-    private final ConcurrentHashMap<Integer, DashboardAssistanceReportDto> dashboardCache = new ConcurrentHashMap<>();
+    private final DashboardAssistanceReportDto dashboardCache = new DashboardAssistanceReportDto();
 
     private final Map<Integer, Consumer<DashboardAssistanceReportDto>> incrementQuantityToProcessStatus = new HashMap<>();
 
@@ -31,48 +29,36 @@ public class DashboardAssistanceReportRepository {
                 dashboardAssistanceReportDto -> dashboardAssistanceReportDto.setDefaultQuantity(1));
     }
 
-    public void add(AssistanceType assistanceType, DashboardAssistanceReportDto newReport) {
-        DashboardAssistanceReportDto dashboardReportFound = this.getByProcessType(assistanceType);
-
-        if (Objects.nonNull(dashboardReportFound)) {
-            incrementQuantityToProcessStatus
-                    .forEach((integer, dashboardReportDtoConsumer) ->
-                            dashboardReportDtoConsumer.accept(dashboardReportFound));
-        } else {
-            dashboardCache.put(assistanceType.getCode(), newReport);
+    public void add(DashboardAssistanceReportDto newReport) {
+        if (Objects.nonNull(dashboardCache)) {
+            if (newReport.getAdvisoryQuantity() > 0) {
+                this.dashboardCache.setAdvisoryQuantity(newReport.getAdvisoryQuantity());
+            }
+            if (newReport.getDefaultQuantity() > 0) {
+                this.dashboardCache.setDefaultQuantity(newReport.getDefaultQuantity());
+            }
+            if (newReport.getConsultancyQuantity() > 0) {
+                this.dashboardCache.setConsultancyQuantity(newReport.getConsultancyQuantity());
+            }
         }
     }
 
-    public ConcurrentMap<Integer, DashboardAssistanceReportDto> getAllDashboardReports() {
+    public DashboardAssistanceReportDto getAllDashboardReports() {
         return dashboardCache;
     }
 
-    public DashboardAssistanceReportDto getByProcessType(AssistanceType assistanceType) {
-        return dashboardCache.get(assistanceType.getCode());
-    }
-
     public void update(AssistanceDto assistanceDto) {
-        DashboardAssistanceReportDto dashboardReportFound =
-                this.getByProcessType(AssistanceType.valueOfCode(assistanceDto.getAssistanceType()));
-
         Integer assistanceType = Integer.valueOf(assistanceDto.getAssistanceType());
 
-        if (Objects.nonNull(dashboardReportFound)) {
-            incrementQuantityToProcessStatus.get(assistanceType).accept(dashboardReportFound);
-        } else {
-            DashboardAssistanceReportDto dashboardAssistanceReportDto = new DashboardAssistanceReportDto();
-
-            dashboardCache.put(AssistanceType.valueOfCode(assistanceDto.getAssistanceType()).getCode(),
-                    dashboardAssistanceReportDto);
+        if (Objects.nonNull(dashboardCache)) {
+            incrementQuantityToProcessStatus.get(assistanceType).accept(dashboardCache);
         }
     }
 
-    public int size() {
-        return dashboardCache.size();
-    }
-
     public void clearCache() {
-        this.dashboardCache.clear();
+        this.dashboardCache.setDefaultQuantity(0);
+        this.dashboardCache.setAdvisoryQuantity(0);
+        this.dashboardCache.setConsultancyQuantity(0);
     }
 
 }

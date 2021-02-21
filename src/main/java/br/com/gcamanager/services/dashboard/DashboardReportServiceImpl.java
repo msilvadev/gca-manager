@@ -1,19 +1,17 @@
 package br.com.gcamanager.services.dashboard;
 
-import br.com.gcamanager.domains.dashboard.DashboardAssistanceReportDto;
-import br.com.gcamanager.domains.dashboard.DashboardAssistanceReportDtoBuilder;
-import br.com.gcamanager.domains.dashboard.DashboardAssistanceReportRepository;
 import br.com.gcamanager.domains.assistance.AssistanceDto;
 import br.com.gcamanager.domains.assistance.AssistanceRepository;
 import br.com.gcamanager.domains.assistance.AssistanceType;
+import br.com.gcamanager.domains.dashboard.DashboardAssistanceReportDto;
+import br.com.gcamanager.domains.dashboard.DashboardAssistanceReportDtoBuilder;
+import br.com.gcamanager.domains.dashboard.DashboardAssistanceReportRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -25,17 +23,10 @@ public class DashboardReportServiceImpl implements DashboardReportService {
     private final AssistanceRepository assistanceRepository;
     private final DashboardAssistanceReportRepository dashboardAssistanceReportRepository;
 
-    private final List<Runnable> tasks;
-
     public DashboardReportServiceImpl(AssistanceRepository assistanceRepository,
                                       DashboardAssistanceReportRepository dashboardAssistanceReportRepository) {
         this.assistanceRepository = assistanceRepository;
         this.dashboardAssistanceReportRepository = dashboardAssistanceReportRepository;
-
-        tasks = Collections.singletonList(() -> {
-            this.loadProcessTypeNewOrderDashboardReport();
-            this.loadProcessTypeDeliveryTissueDashboardReport();
-        });
     }
 
     @Override
@@ -46,11 +37,9 @@ public class DashboardReportServiceImpl implements DashboardReportService {
 
         this.dashboardAssistanceReportRepository.clearCache();
 
-        this.executeAllTasks(tasks).join();
+        this.addDashboardReportToCache();
 
         LOGGER.info("Dashboard Report Cache loaded in {} ms", System.currentTimeMillis() - start);
-
-        LOGGER.info("Load {} Dashboard Report Cache", this.dashboardAssistanceReportRepository.size());
     }
 
     @Override
@@ -59,19 +48,11 @@ public class DashboardReportServiceImpl implements DashboardReportService {
     }
 
     @Override
-    public ConcurrentMap<Integer, DashboardAssistanceReportDto> getDashboardReport() {
+    public DashboardAssistanceReportDto getDashboardReport() {
         return dashboardAssistanceReportRepository.getAllDashboardReports();
     }
 
-    public void loadProcessTypeNewOrderDashboardReport() {
-        addDashboardReportToCache(AssistanceType.ADVISORY);
-    }
-
-    public void loadProcessTypeDeliveryTissueDashboardReport() {
-        addDashboardReportToCache(AssistanceType.CONSULTANCY);
-    }
-
-    private void addDashboardReportToCache(AssistanceType assistanceType) {
+    private void addDashboardReportToCache() {
         DashboardAssistanceReportDtoBuilder builder = new DashboardAssistanceReportDtoBuilder();
 
         DashboardAssistanceReportDto report = builder
@@ -80,7 +61,7 @@ public class DashboardReportServiceImpl implements DashboardReportService {
                 .setDefaultQuantity(assistanceRepository.countByProcessTypeAndProcessStatus(AssistanceType.DEFAULT))
                 .build();
 
-        this.dashboardAssistanceReportRepository.add(assistanceType, report);
+        this.dashboardAssistanceReportRepository.add(report);
     }
 
     private CompletableFuture<Void> executeAllTasks(List<Runnable> tasks) {

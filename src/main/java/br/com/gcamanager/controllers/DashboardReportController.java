@@ -3,12 +3,13 @@ package br.com.gcamanager.controllers;
 import br.com.gcamanager.domains.dashboard.DashboardAssistanceReportDto;
 import br.com.gcamanager.services.dashboard.DashboardReportService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.concurrent.ConcurrentMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("dashboard-report")
+@RequestMapping("gca-dashboard-report")
 public class DashboardReportController {
 
     private final DashboardReportService dashboardReportService;
@@ -18,12 +19,12 @@ public class DashboardReportController {
     }
 
     @GetMapping
-    public ResponseEntity<ConcurrentMap<Integer, DashboardAssistanceReportDto>> getDashboardReport() {
+    public ResponseEntity<DashboardAssistanceReportDto> getDashboardReport() {
         return ResponseEntity.ok(dashboardReportService.getDashboardReport());
     }
 
     @PostMapping("refresh-cache")
-    public ResponseEntity<ConcurrentMap<Integer, DashboardAssistanceReportDto>> refreshCache() {
+    public ResponseEntity<DashboardAssistanceReportDto> refreshCache() {
         dashboardReportService.initializeCache();
         return ResponseEntity.ok(dashboardReportService.getDashboardReport());
     }
